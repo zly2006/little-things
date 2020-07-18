@@ -3,6 +3,7 @@
 #include<string>
 #include<fstream>
 using namespace std;
+//-files命令未完成，只能输入一个文件
 using uint = unsigned int;
 namespace std {
     class tastring :public string {
