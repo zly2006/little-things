@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <ctime>
 #include <cmath>
 #include <vector>
@@ -54,6 +54,8 @@ public:
 		log << endl << endl << "AI,start confing= " << filename << " ,初始化templ" << endl;
 		_readAll(filename);
 		confingname = filename;
+		weights.clear();
+		biases.clear();
 		int pos = (int)templ[0][0] + 2;
 		if (strict) {
 			int a = 0;
@@ -66,17 +68,19 @@ public:
 			}
 		}
 		for (int i = 0; i < templ[0][0]; i++) {
+			biases.push_back(vector<double>(0));
+			weights.push_back(vector<vector<double>>(0));
 			for (int j = 0; j < templ[0][i + 2]; j++) {
+				weights[i].push_back(vector<double>(0));
 				for (int k = 0; k < templ[0][i + 1]; k++) {
-					weights[i][j][k] = templ[0][pos++];
+					weights[i][j].push_back(templ[0][pos++]);
 				}
-				biases[i][j] = templ[0][pos++];
+				biases[i].push_back(templ[0][pos++]);
 			}
 		}
 		log << "配置已读取" << endl;
 	}
 	//使用给定的每层个数创建confing
-	//建议使用常量数组，实现使用了sizeof
 	AI(vector<int> count, string confing) :confingname(confing) {
 		log.open("AI.log");
 		templ.push_back(vector<double>(0));
@@ -90,7 +94,7 @@ public:
 			weights.push_back(vector<vector<double>>(0));
 			biases.push_back(vector<double>(0));
 			log << count[i + 1] << endl;
-			for (int j = 0; i < count[i + 1]; j++) {
+			for (int j = 0; j < count[i + 1]; j++) {
 				weights[i].push_back(vector<double>(0));
 				for (int k = 0; k < count[i]; k++) {
 					weights[i][j].push_back((double)(rand() % 100 + 1) / 100);
@@ -171,9 +175,12 @@ public:
 		cout << "计算结果：\n";
 		for (int i = 0; i < templ[1].size(); i++) {
 			cout << "[" << i << "]=" << templ[1][i] << endl;
-			log << "compute[" << i << "]=" << templ[1][i] << endl;
+			log << "templ[1]:compute[" << i << "]=" << templ[1][i] << endl;
 		}
 		//TODO
+		for (int i = 0; i < templ[1].size(); i++) {
+
+		}
 		log << "train finish" << endl;
 	}
 	//TODO
@@ -187,6 +194,6 @@ public:
 int main()
 {
 	cout << "不要点击关闭，这将不会保存任何更改！" << endl;
-	AI ai({ 81,10,3 }, "confing");
-	ai.~AI();
+
+	AI ai({100,50,10,3},"confing");
 }
